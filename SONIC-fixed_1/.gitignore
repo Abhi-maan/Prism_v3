@@ -1,0 +1,20 @@
+# Datasets
+dataset/
+datasets/
+
+# Results
+results/
+
+# Documents / Reports
+*.pdf
+*.docx
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
