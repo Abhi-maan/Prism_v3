@@ -1,0 +1,191 @@
+[SONIC DB] Loading existing database with 28409 files...
+[SONIC DB] Attached unified archive (28408 files) + 1 delta file(s).
+[SONIC DB] Database index ready (28409 items).
+[attach 66s, 28409 files]
+  generated track 1/37
+  generated track 2/37
+  generated track 3/37
+  generated track 4/37
+  generated track 5/37
+  generated track 6/37
+  generated track 7/37
+  generated track 8/37
+  generated track 9/37
+  generated track 10/37
+  generated track 11/37
+  generated track 12/37
+  generated track 13/37
+  generated track 14/37
+  generated track 15/37
+  generated track 16/37
+  generated track 17/37
+  generated track 18/37
+  generated track 19/37
+  generated track 20/37
+  generated track 21/37
+  generated track 22/37
+  generated track 23/37
+  generated track 24/37
+  generated track 25/37
+  generated track 26/37
+  generated track 27/37
+  generated track 28/37
+  generated track 29/37
+  generated track 30/37
+  generated track 31/37
+  generated track 32/37
+  generated track 33/37
+  generated track 34/37
+  generated track 35/37
+  generated track 36/37
+  generated track 37/37
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 44104868.
+Note: Trying to resync...
+Note: Skipped 479 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 44104868.
+Note: Trying to resync...
+Note: Skipped 479 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 44104868.
+Note: Trying to resync...
+Note: Skipped 479 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+[positives 1051, negatives 784]
+[final] 1051+784 queries in 193s -> /Users/user84/Downloads/prism_v2/.agents/tasks/sonic-robustness/experiments/final.json
+[final] locked thresholds: dev edited acc 91.4%  calibration FPs 0/784

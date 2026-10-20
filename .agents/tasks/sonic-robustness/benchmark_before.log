@@ -1,0 +1,313 @@
+[SONIC DB] Loading existing database with 28409 files...
+[SONIC DB] Database index ready (28409 items).
+[DB attached in 247s: 28409 entries]
+[tracks: 103; eligible pool sizes {'environment': 2000, 'speech': 15613, 'music': 999, 'user_upload': 1}]
+[1/103] user_upload Chaleya Jawan 320 Kbps.mp3               running acc 8/31  (11s)
+[2/103] environment 4-172733-A-36.wav                        running acc 8/58  (12s)
+[3/103] environment 1-103298-A-9.wav                         running acc 16/85  (13s)
+[4/103] environment 3-51731-A-42.wav                         running acc 16/112  (13s)
+[5/103] environment 2-123896-A-24.wav                        running acc 25/139  (14s)
+[6/103] environment 4-194808-A-29.wav                        running acc 26/166  (15s)
+[7/103] environment 5-194899-B-3.wav                         running acc 26/193  (15s)
+[8/103] environment 3-103401-C-33.wav                        running acc 35/220  (16s)
+[9/103] environment 2-209473-A-25.wav                        running acc 44/247  (16s)
+[10/103] environment 3-93010-A-18.wav                         running acc 54/274  (17s)
+[11/103] environment 3-142349-A-17.wav                        running acc 64/301  (18s)
+[12/103] environment 1-79711-A-32.wav                         running acc 73/328  (18s)
+[13/103] environment 4-173865-A-9.wav                         running acc 84/355  (19s)
+[14/103] environment 3-121348-A-9.wav                         running acc 84/382  (20s)
+[15/103] environment 5-219379-B-11.wav                        running acc 84/409  (20s)
+[16/103] environment 1-12654-B-15.wav                         running acc 92/436  (21s)
+[17/103] environment 3-117504-A-16.wav                        running acc 92/463  (21s)
+[18/103] environment 2-82071-A-27.wav                         running acc 101/490  (22s)
+[19/103] environment 2-117615-E-48.wav                        running acc 101/517  (23s)
+[20/103] environment 2-69131-A-5.wav                          running acc 101/544  (23s)
+[21/103] environment 2-182508-B-8.wav                         running acc 101/571  (24s)
+[22/103] environment 3-172881-A-48.wav                        running acc 101/598  (25s)
+[23/103] environment 2-155801-A-11.wav                        running acc 101/625  (25s)
+[24/103] environment 5-215445-A-47.wav                        running acc 101/652  (26s)
+[25/103] environment 3-170383-A-38.wav                        running acc 111/679  (27s)
+[26/103] environment 1-12653-A-15.wav                         running acc 123/706  (27s)
+[27/103] environment 4-161103-A-47.wav                        running acc 123/733  (28s)
+[28/103] environment 1-51436-A-17.wav                         running acc 132/760  (28s)
+[29/103] environment 2-50665-A-20.wav                         running acc 132/787  (29s)
+[30/103] environment 5-182007-A-36.wav                        running acc 132/814  (30s)
+[31/103] environment 5-185579-A-41.wav                        running acc 138/841  (30s)
+[32/103] environment 5-180156-A-43.wav                        running acc 144/868  (31s)
+[33/103] environment 2-79769-A-26.wav                         running acc 154/895  (32s)
+[34/103] environment 3-138212-A-45.wav                        running acc 154/922  (32s)
+[35/103] environment 3-118069-B-27.wav                        running acc 162/949  (33s)
+[36/103] music       rock.00087.au                            running acc 174/980  (35s)
+[37/103] music       reggae.00072.au                          running acc 183/1011  (37s)
+[38/103] music       pop.00005.au                             running acc 183/1042  (39s)
+[39/103] music       jazz.00050.au                            running acc 183/1073  (41s)
+[40/103] music       hiphop.00013.au                          running acc 194/1104  (43s)
+[41/103] music       rock.00042.au                            running acc 204/1135  (45s)
+[42/103] music       hiphop.00050.au                          running acc 204/1166  (47s)
+[43/103] music       jazz.00046.au                            running acc 204/1197  (49s)
+[44/103] music       country.00029.au                         running acc 213/1228  (50s)
+[45/103] music       rock.00026.au                            running acc 213/1259  (52s)
+[46/103] music       rock.00069.au                            running acc 213/1290  (54s)
+[47/103] music       blues.00037.au                           running acc 213/1321  (56s)
+[48/103] music       reggae.00033.au                          running acc 213/1352  (58s)
+[49/103] music       disco.00069.au                           running acc 213/1383  (60s)
+[50/103] music       rock.00075.au                            running acc 213/1414  (62s)
+[51/103] music       hiphop.00080.au                          running acc 225/1445  (64s)
+[52/103] music       jazz.00063.au                            running acc 225/1476  (66s)
+[53/103] music       blues.00099.au                           running acc 225/1507  (68s)
+[54/103] music       reggae.00062.au                          running acc 225/1538  (70s)
+[55/103] music       country.00016.au                         running acc 237/1569  (72s)
+[56/103] music       jazz.00048.au                            running acc 237/1600  (74s)
+[57/103] music       metal.00086.au                           running acc 248/1631  (76s)
+[58/103] music       disco.00003.au                           running acc 258/1662  (78s)
+[59/103] music       classical.00075.au                       running acc 258/1693  (80s)
+[60/103] music       disco.00061.au                           running acc 269/1724  (82s)
+[61/103] music       reggae.00099.au                          running acc 280/1755  (84s)
+[62/103] music       disco.00039.au                           running acc 280/1786  (86s)
+[63/103] music       country.00082.au                         running acc 291/1817  (88s)
+[64/103] music       jazz.00002.au                            running acc 291/1848  (90s)
+[65/103] music       metal.00041.au                           running acc 291/1879  (92s)
+[66/103] music       rock.00006.au                            running acc 291/1910  (94s)
+[67/103] music       disco.00065.au                           running acc 291/1941  (96s)
+[68/103] music       blues.00028.au                           running acc 291/1972  (98s)
+[69/103] music       rock.00014.au                            running acc 301/2003  (99s)
+[70/103] speech      LJ005-0144.wav                           running acc 310/2030  (100s)
+[71/103] speech      LJ017-0015.wav                           running acc 322/2057  (101s)
+[72/103] speech      8842-304647-0011.flac                    running acc 333/2085  (102s)
+[73/103] speech      LJ032-0152.wav                           running acc 344/2112  (102s)
+[74/103] speech      LJ006-0210.wav                           running acc 355/2137  (103s)
+[75/103] speech      6345-64257-0018.flac                     running acc 365/2162  (103s)
+[76/103] speech      LJ001-0082.wav                           running acc 376/2189  (104s)
+[77/103] speech      LJ002-0217.wav                           running acc 380/2217  (105s)
+[78/103] speech      3081-166546-0070.flac                    running acc 391/2245  (106s)
+[79/103] speech      1988-24833-0025.flac                     running acc 391/2270  (106s)
+[80/103] speech      LJ039-0195.wav                           running acc 402/2298  (107s)
+[81/103] speech      LJ036-0057.wav                           running acc 412/2325  (108s)
+[82/103] speech      5338-284437-0028.flac                    running acc 421/2350  (108s)
+[83/103] speech      LJ047-0184.wav                           running acc 433/2378  (109s)
+[84/103] speech      LJ005-0172.wav                           running acc 433/2403  (109s)
+[85/103] speech      LJ032-0212.wav                           running acc 445/2431  (110s)
+[86/103] speech      LJ008-0110.wav                           running acc 445/2456  (110s)
+[87/103] speech      LJ039-0244.wav                           running acc 457/2483  (111s)
+[88/103] speech      LJ006-0019.wav                           running acc 469/2511  (112s)
+[89/103] speech      LJ016-0410.wav                           running acc 481/2539  (113s)
+[90/103] speech      LJ018-0285.wav                           running acc 491/2564  (113s)
+[91/103] speech      LJ037-0225.wav                           running acc 502/2592  (114s)
+[92/103] speech      8297-275156-0004.flac                    running acc 502/2617  (114s)
+[93/103] speech      5536-43358-0016.flac                     running acc 502/2642  (115s)
+[94/103] speech      LJ013-0134.wav                           running acc 513/2669  (115s)
+[95/103] speech      LJ007-0001.wav                           running acc 525/2697  (116s)
+[96/103] speech      LJ015-0250.wav                           running acc 537/2725  (117s)
+[97/103] speech      LJ014-0040.wav                           running acc 548/2752  (118s)
+[98/103] speech      LJ043-0108.wav                           running acc 559/2780  (118s)
+[99/103] speech      LJ009-0115.wav                           running acc 570/2807  (119s)
+[100/103] speech      LJ016-0233.wav                           running acc 570/2832  (119s)
+[101/103] speech      LJ006-0295.wav                           running acc 582/2859  (120s)
+[102/103] speech      LJ001-0095.wav                           running acc 593/2884  (120s)
+[103/103] speech      LJ026-0100.wav                           running acc 605/2912  (121s)
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 44104868.
+Note: Trying to resync...
+Note: Skipped 479 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 44104868.
+Note: Trying to resync...
+Note: Skipped 479 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 44104868.
+Note: Trying to resync...
+Note: Skipped 479 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 44104868.
+Note: Trying to resync...
+Note: Skipped 479 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 44104868.
+Note: Trying to resync...
+Note: Skipped 479 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 24453107.
+Note: Trying to resync...
+Note: Skipped 561 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12291840.
+Note: Trying to resync...
+Note: Skipped 463 bytes in input.
+Note: Illegal Audio-MPEG-Header 0x55555555 at offset 12825103.
+Note: Trying to resync...
+Note: Skipped 484 bytes in input.
+[negatives: 118, false positives 0]
+
+# Module 1 robustness benchmark (full)
+
+- Run: 2026-10-20 03:48:55 | git: 057c0e19+uncommitted-changes | path: app.run_duplicate_detection
+- DB: 28409 entries | tracks: 103 ({'user_upload': 1, 'environment': 34, 'music': 34, 'speech': 34})
+- Correct = matched AND matched_filename == true DB filename (top-1, reported as Duplicate/Edited Audio).
+
+| Condition | Group | n | Top-1 acc | env | music | speech | user | wrong-match | mean ms | p95 ms |
+|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| duplicate | Duplicate | 103 | 57.3% | 18/34 | 13/34 | 27/34 | 1/1 | 0 | 12.5 | 18.2 |
+| pitch_-4st | Pitch shift | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.4 | 14.9 |
+| pitch_-2st | Pitch shift | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.4 | 14.9 |
+| pitch_-1st | Pitch shift | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.3 | 14.9 |
+| pitch_+1st | Pitch shift | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.3 | 14.8 |
+| pitch_+2st | Pitch shift | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.3 | 14.9 |
+| pitch_+4st | Pitch shift | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.3 | 15.0 |
+| speed_-20pct | Speed change | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.5 | 15.1 |
+| speed_-10pct | Speed change | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.4 | 14.8 |
+| speed_-5pct | Speed change | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.3 | 14.8 |
+| speed_+5pct | Speed change | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 13.0 | 14.6 |
+| speed_+10pct | Speed change | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 12.8 | 14.4 |
+| speed_+20pct | Speed change | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 12.4 | 14.7 |
+| mp3_64kbps | Compression | 103 | 49.5% | 12/34 | 11/34 | 28/34 | 0/1 | 0 | 13.2 | 16.8 |
+| mp3_128kbps | Compression | 103 | 57.3% | 17/34 | 13/34 | 28/34 | 1/1 | 0 | 13.1 | 17.1 |
+| noise_snr10db | Noise | 103 | 25.2% | 4/34 | 7/34 | 15/34 | 0/1 | 0 | 12.1 | 14.9 |
+| noise_snr20db | Noise | 103 | 50.5% | 14/34 | 12/34 | 26/34 | 0/1 | 0 | 10.8 | 14.4 |
+| gain_-6db | Gain | 103 | 56.3% | 17/34 | 13/34 | 27/34 | 1/1 | 0 | 10.3 | 14.1 |
+| gain_-3db | Gain | 103 | 56.3% | 17/34 | 13/34 | 27/34 | 1/1 | 0 | 10.0 | 13.8 |
+| gain_+3db | Gain | 103 | 56.3% | 17/34 | 13/34 | 27/34 | 1/1 | 0 | 10.0 | 13.6 |
+| gain_+6db | Gain | 103 | 56.3% | 17/34 | 13/34 | 27/34 | 1/1 | 0 | 9.9 | 13.8 |
+| highpass_150hz | High-pass | 103 | 38.8% | 10/34 | 2/34 | 28/34 | 0/1 | 0 | 11.1 | 14.4 |
+| highpass_200hz | High-pass | 103 | 34.0% | 9/34 | 0/34 | 26/34 | 0/1 | 0 | 11.3 | 14.5 |
+| trim_start_3s | Trim | 92 | 0.0% | 0/34 | 0/34 | 0/23 | 0/1 | 0 | 10.1 | 14.0 |
+| trim_start_10s | Trim | 35 | 5.7% | - | 2/34 | - | 0/1 | 0 | 13.5 | 14.5 |
+| trim_end_3s | Trim | 92 | 37.0% | 2/34 | 13/34 | 18/23 | 1/1 | 0 | 8.6 | 13.7 |
+| trim_end_10s | Trim | 35 | 40.0% | - | 13/34 | - | 1/1 | 0 | 11.4 | 13.7 |
+| timeshift_cut_5s | Time shift | 48 | 2.1% | - | 1/34 | 0/13 | 0/1 | 0 | 12.4 | 14.5 |
+| timeshift_cut_20s | Time shift | 35 | 0.0% | - | 0/34 | - | 0/1 | 0 | 13.7 | 16.4 |
+| timeshift_pad_5s | Time shift | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 7.4 | 7.7 |
+| timeshift_pad_20s | Time shift | 103 | 0.0% | 0/34 | 0/34 | 0/34 | 0/1 | 0 | 7.3 | 7.6 |
+
+Overall edited accuracy (all modified conditions pooled): 546/2809 = 19.4%  | latency mean 11.9 ms, p95 15.5 ms
+
+| Negatives (not in DB) | n | false positives | FPR |
+|---|---:|---:|---:|
+| librispeech_test_clean | 40 | 0 | 0.0% |
+| local_music_mp3_segment | 18 | 0 | 0.0% |
+| local_speech_mp3_segment | 20 | 0 | 0.0% |
+| esc50_time_reversed | 40 | 0 | 0.0% |
+| **all** | 118 | 0 | 0.0% |
+
+wrote .agents/tasks/sonic-robustness/benchmark_before.json and .agents/tasks/sonic-robustness/benchmark_before.md

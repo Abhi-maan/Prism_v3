@@ -1,0 +1,225 @@
+{
+ "duplicate": {
+  "n": 31,
+  "retr_top1": 30,
+  "pipe_accept": 30,
+  "app_deployed": 20,
+  "app_localpath": 30
+ },
+ "pitch_-4st": {
+  "n": 31,
+  "retr_top1": 0,
+  "pipe_accept": 0,
+  "app_deployed": 0,
+  "app_localpath": 0,
+  "rescue_top1": 20
+ },
+ "pitch_-2st": {
+  "n": 31,
+  "retr_top1": 0,
+  "pipe_accept": 0,
+  "app_deployed": 0,
+  "app_localpath": 0,
+  "rescue_top1": 23
+ },
+ "pitch_-1st": {
+  "n": 31,
+  "retr_top1": 6,
+  "pipe_accept": 1,
+  "app_deployed": 0,
+  "app_localpath": 0,
+  "rescue_top1": 24
+ },
+ "pitch_+1st": {
+  "n": 31,
+  "retr_top1": 10,
+  "pipe_accept": 0,
+  "app_deployed": 0,
+  "app_localpath": 0,
+  "rescue_top1": 27
+ },
+ "pitch_+2st": {
+  "n": 31,
+  "retr_top1": 0,
+  "pipe_accept": 0,
+  "app_deployed": 0,
+  "app_localpath": 0,
+  "rescue_top1": 26
+ },
+ "pitch_+4st": {
+  "n": 31,
+  "retr_top1": 0,
+  "pipe_accept": 0,
+  "app_deployed": 0,
+  "app_localpath": 0,
+  "rescue_top1": 23
+ },
+ "speed_-20pct": {
+  "n": 31,
+  "retr_top1": 25,
+  "pipe_accept": 3,
+  "app_deployed": 0,
+  "app_localpath": 0
+ },
+ "speed_-10pct": {
+  "n": 31,
+  "retr_top1": 26,
+  "pipe_accept": 5,
+  "app_deployed": 0,
+  "app_localpath": 0
+ },
+ "speed_-5pct": {
+  "n": 31,
+  "retr_top1": 26,
+  "pipe_accept": 6,
+  "app_deployed": 0,
+  "app_localpath": 2
+ },
+ "speed_+5pct": {
+  "n": 31,
+  "retr_top1": 24,
+  "pipe_accept": 9,
+  "app_deployed": 0,
+  "app_localpath": 1
+ },
+ "speed_+10pct": {
+  "n": 31,
+  "retr_top1": 25,
+  "pipe_accept": 5,
+  "app_deployed": 0,
+  "app_localpath": 0
+ },
+ "speed_+20pct": {
+  "n": 31,
+  "retr_top1": 27,
+  "pipe_accept": 3,
+  "app_deployed": 0,
+  "app_localpath": 0
+ },
+ "mp3_64kbps": {
+  "n": 31,
+  "retr_top1": 30,
+  "pipe_accept": 29,
+  "app_deployed": 17,
+  "app_localpath": 28
+ },
+ "mp3_128kbps": {
+  "n": 31,
+  "retr_top1": 29,
+  "pipe_accept": 29,
+  "app_deployed": 20,
+  "app_localpath": 29
+ },
+ "noise_snr10db": {
+  "n": 31,
+  "retr_top1": 12,
+  "pipe_accept": 12,
+  "app_deployed": 6,
+  "app_localpath": 11
+ },
+ "noise_snr20db": {
+  "n": 31,
+  "retr_top1": 23,
+  "pipe_accept": 23,
+  "app_deployed": 17,
+  "app_localpath": 23
+ },
+ "gain_-6db": {
+  "n": 31,
+  "retr_top1": 29,
+  "pipe_accept": 29,
+  "app_deployed": 19,
+  "app_localpath": 29
+ },
+ "gain_-3db": {
+  "n": 31,
+  "retr_top1": 29,
+  "pipe_accept": 29,
+  "app_deployed": 19,
+  "app_localpath": 29
+ },
+ "gain_+3db": {
+  "n": 31,
+  "retr_top1": 29,
+  "pipe_accept": 29,
+  "app_deployed": 19,
+  "app_localpath": 29
+ },
+ "gain_+6db": {
+  "n": 31,
+  "retr_top1": 29,
+  "pipe_accept": 29,
+  "app_deployed": 19,
+  "app_localpath": 29
+ },
+ "highpass_150hz": {
+  "n": 31,
+  "retr_top1": 30,
+  "pipe_accept": 29,
+  "app_deployed": 14,
+  "app_localpath": 27
+ },
+ "highpass_200hz": {
+  "n": 31,
+  "retr_top1": 30,
+  "pipe_accept": 23,
+  "app_deployed": 12,
+  "app_localpath": 21
+ },
+ "trim_start_3s": {
+  "n": 28,
+  "retr_top1": 25,
+  "pipe_accept": 17,
+  "app_deployed": 0,
+  "app_localpath": 0
+ },
+ "trim_start_10s": {
+  "n": 11,
+  "retr_top1": 10,
+  "pipe_accept": 10,
+  "app_deployed": 1,
+  "app_localpath": 0
+ },
+ "trim_end_3s": {
+  "n": 28,
+  "retr_top1": 27,
+  "pipe_accept": 23,
+  "app_deployed": 11,
+  "app_localpath": 21
+ },
+ "trim_end_10s": {
+  "n": 11,
+  "retr_top1": 10,
+  "pipe_accept": 10,
+  "app_deployed": 5,
+  "app_localpath": 10
+ },
+ "timeshift_cut_5s": {
+  "n": 14,
+  "retr_top1": 12,
+  "pipe_accept": 10,
+  "app_deployed": 0,
+  "app_localpath": 0
+ },
+ "timeshift_cut_20s": {
+  "n": 11,
+  "retr_top1": 11,
+  "pipe_accept": 10,
+  "app_deployed": 0,
+  "app_localpath": 0
+ },
+ "timeshift_pad_5s": {
+  "n": 31,
+  "retr_top1": 0,
+  "pipe_accept": 0,
+  "app_deployed": 0,
+  "app_localpath": 0
+ },
+ "timeshift_pad_20s": {
+  "n": 31,
+  "retr_top1": 0,
+  "pipe_accept": 0,
+  "app_deployed": 0,
+  "app_localpath": 0
+ }
+}

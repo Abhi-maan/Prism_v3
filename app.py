@@ -368,6 +368,9 @@ def run_duplicate_detection(
                     "fingerprint_time_ms": db_res.get("fingerprint_time_ms", 0.0),
                     "search_time_ms":      db_res.get("search_time_ms", 0.0),
                     "query_time_ms":       db_res["query_time_ms"],
+                    "edit_hypothesis":     db_res.get("edit_hypothesis"),
+                    "similarity":          db_res.get("similarity"),
+                    "verification":        db_res.get("verification"),
                 }
 
         # C. Intra-batch search if no reference DB is attached
@@ -380,7 +383,7 @@ def run_duplicate_detection(
                 matched_b = by_id_b.get(res_b.file_id)
                 if matched_b:
                     is_match_b, match_type_b = sonic_db._classify_match(
-                        str(audio_path), matched_b["path"], res_b
+                        str(audio_path), matched_b["path"], res_b, cand_fid=res_b.file_id
                     )
                     if is_match_b:
                         t_b_timing = getattr(res_b, "timing_ms", {}) or {}
@@ -1507,4 +1510,5 @@ if __name__ == "__main__":
     print("  http://localhost:5000")
     print("=" * 65)
     _warmup_runtime()
-    app.run(host="0.0.0.0", port=5000, debug=True, use_reloader=False)
+    # PORT env var allows overriding (macOS AirPlay Receiver occupies 5000)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", "5000")), debug=True, use_reloader=False)

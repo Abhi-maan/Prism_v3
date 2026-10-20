@@ -42,3 +42,8 @@ syntehetic audio detection/echoes_clean_v2.db
 # Synthetic audio test dataset media (manifest and README are tracked)
 synthetic audio test dataset/real_audio/
 synthetic audio test dataset/ai_synthetic/
+# Local Python virtualenv and server logs
+.venv/
+server.log
+# Pre-fix source/store backups (same content is in git history)
+.agents/tasks/sonic-robustness/backup/

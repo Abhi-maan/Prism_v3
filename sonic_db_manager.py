@@ -420,7 +420,7 @@ class SONICDatabaseManager:
                             if cand_fid != fid and cand_fid not in skipped_batch_ids:
                                 cand_entry = next((x for x in new_entries if x["file_id"] == cand_fid), None)
                                 if cand_entry:
-                                    is_match, match_type = self._classify_match(e["path"], cand_entry["path"], res_b)
+                                    is_match, match_type = self._classify_match(e["path"], cand_entry["path"], res_b, cand_fid=cand_fid)
                                     if is_match and match_type in ("Duplicate", "Edited Audio"):
                                         skipped_batch_ids.add(cand_fid)
                                         skipped_batch.append({
@@ -477,6 +477,26 @@ class SONICDatabaseManager:
                 })
 
     def _rebuild_index(self) -> None:
+        """Assembles DomainIndex, using all cores for the faiss HNSW builds.
+
+        The synthetic-detection module imported by app.py sets
+        OMP_NUM_THREADS=1 at import time, which made faiss build the two
+        1.9M-window sub-fingerprint HNSW graphs single-threaded (measured: DB
+        attach ~231 s inside the app vs ~70 s standalone). The thread count is
+        raised only for the duration of the build and restored afterwards."""
+        try:
+            import faiss
+            prev = faiss.omp_get_max_threads()
+            faiss.omp_set_num_threads(max(prev, os.cpu_count() or 1))
+        except Exception:
+            faiss, prev = None, None
+        try:
+            self._rebuild_index_impl()
+        finally:
+            if faiss is not None and prev is not None:
+                faiss.omp_set_num_threads(prev)
+
+    def _rebuild_index_impl(self) -> None:
         """Assembles DomainIndex directly from saved .npz fingerprints in memory."""
         if not self.manifest:
             self.domain_index = None
@@ -505,37 +525,27 @@ class SONICDatabaseManager:
                 import faiss
                 data = np.load(archive_path)
                 file_ids = data["file_ids"]
-                if len(file_ids) == len(self.manifest) and set(file_ids) == manifest_fids:
-                    n_files = len(file_ids)
-                    lidx = LandmarkIndex()
-                    lidx.file_id_to_local = {fid: i for i, fid in enumerate(file_ids)}
-                    lidx.local_to_file_id = file_ids
-                    lidx.n_files = n_files
-                    lidx.n_hashes_per_file = dict(zip(file_ids, data["n_hashes"]))
-                    lidx.build_from_flat(data["hashes"], data["lids"], data["times"])
-
-                    bidx = BinaryEmbedIndex()
-                    bidx.build(file_ids, data["raw_vecs"])
-
-                    hidx = BinaryHNSWIndex()
-                    hidx.index = faiss.read_index_binary(str(faiss_path))
-                    hidx.file_ids = file_ids
-
-                    sidx = SubFingerprintIndex()
-                    sidx.build(data["subfp_fids"], data["subfp_codes"])
-
-                    sidx_fine = SubFingerprintIndex()
-                    sidx_fine.build(data["subfp_fine_fids"], data["subfp_fine_codes"])
-
-                    self.domain_index = DomainIndex(
-                        category="general",
-                        landmark_index=lidx,
-                        binary_embed=bidx,
-                        binary_hnsw=hidx,
-                        subfp_index=sidx,
-                        subfp_fine_index=sidx_fine,
-                        query_max_duration_sec=QUERY_MAX_DURATION_SEC,
+                archive_fids = set(file_ids.tolist())
+                if len(file_ids) == len(self.manifest) and archive_fids == manifest_fids:
+                    self.domain_index = self._assemble_domain_index(
+                        file_ids, data["n_hashes"], data["hashes"], data["lids"], data["times"],
+                        data["raw_vecs"], faiss.read_index_binary(str(faiss_path)),
+                        data["subfp_fids"], data["subfp_codes"],
+                        data["subfp_fine_fids"], data["subfp_fine_codes"],
                     )
+                    self._refresh_manifest_lookup()
+                    return
+                if archive_fids < manifest_fids:
+                    # Archive + delta: the archive covers most of the manifest and a
+                    # few entries were ingested after it was written (e.g. one web-UI
+                    # upload). Load only the missing entries' .npz files and append
+                    # them in memory, instead of re-reading all ~28k .npz files on
+                    # every start. Nothing is written back to the store.
+                    delta = [e for e in self.manifest if e["file_id"] not in archive_fids
+                             and (self.fp_dir / e["fp_file"]).exists()]
+                    self.domain_index = self._attach_archive_with_delta(data, faiss_path, delta)
+                    self._refresh_manifest_lookup()
+                    print(f"[SONIC DB] Attached unified archive ({len(file_ids)} files) + {len(delta)} delta file(s).")
                     return
             except Exception as e:
                 print(f"[SONIC DB] Unified archive load fallback: {e}")
@@ -591,40 +601,58 @@ class SONICDatabaseManager:
                     subfp_fine_fids_chunks.append(np.full(sf_codes.shape[0], fid, dtype=np.int64))
                     subfp_fine_code_chunks.append(sf_codes)
 
-        # Build Landmark Index
-        if all_hashes:
-            lidx.build_from_flat(
-                np.concatenate(all_hashes),
-                np.concatenate(all_lids),
-                np.concatenate(all_times),
-            )
-        else:
-            lidx.build_from_flat(
-                np.array([], dtype=np.uint32),
-                np.array([], dtype=np.int32),
-                np.array([], dtype=np.float32),
-            )
+        def _cat(chunks, dtype, width=None):
+            if chunks:
+                return np.concatenate(chunks)
+            return np.empty((0, width), dtype=dtype) if width else np.array([], dtype=dtype)
 
-        # Build Binary Embed Index
+        self.domain_index = self._assemble_domain_index(
+            np.array(file_ids, dtype=np.int64),
+            np.array([lidx.n_hashes_per_file.get(fid, 0) for fid in file_ids], dtype=np.int32),
+            _cat(all_hashes, np.uint32), _cat(all_lids, np.int32), _cat(all_times, np.float32),
+            np.stack(all_raw_vecs) if all_raw_vecs else np.empty((0, 256), dtype=np.float32),
+            None,
+            _cat(subfp_fids_chunks, np.int64), _cat(subfp_code_chunks, np.uint8, 8),
+            _cat(subfp_fine_fids_chunks, np.int64), _cat(subfp_fine_code_chunks, np.uint8, 24),
+        )
+        self._refresh_manifest_lookup()
+
+    def _refresh_manifest_lookup(self) -> None:
+        self._manifest_by_id = {e["file_id"]: e for e in self.manifest}
+
+    @staticmethod
+    def _assemble_domain_index(file_ids, n_hashes, hashes, lids, times, raw_vecs, hnsw_index,
+                               subfp_fids, subfp_codes, subfp_fine_fids, subfp_fine_codes) -> DomainIndex:
+        """Single place that turns flat fingerprint arrays into the app's DomainIndex.
+        `lids` are local ids, i.e. positions in `file_ids`. `hnsw_index` is a
+        prebuilt faiss binary index over `raw_vecs` codes, or None to build one."""
+        file_ids = np.asarray(file_ids, dtype=np.int64)
+        lidx = LandmarkIndex()
+        lidx.file_id_to_local = {int(fid): i for i, fid in enumerate(file_ids)}
+        lidx.local_to_file_id = file_ids
+        lidx.n_files = len(file_ids)
+        lidx.n_hashes_per_file = {int(f): int(n) for f, n in zip(file_ids, n_hashes)}
+        lidx.build_from_flat(hashes, lids, times)
+
         bidx = BinaryEmbedIndex()
-        if all_raw_vecs:
-            bidx.build(file_ids, np.stack(all_raw_vecs))
-
-        # Build Binary HNSW Index
         hidx = BinaryHNSWIndex()
-        if bidx.codes.shape[0] > 0:
-            hidx.build(file_ids, bidx.codes)
+        if len(raw_vecs):
+            bidx.build(file_ids, raw_vecs)
+            if hnsw_index is None:
+                hidx.build(file_ids, bidx.codes)
+            else:
+                hidx.index = hnsw_index
+                hidx.file_ids = file_ids
+                hidx.n_bits = int(hnsw_index.d)
 
-        # Build SubFingerprint Indices
         sidx = SubFingerprintIndex()
-        if subfp_code_chunks:
-            sidx.build(np.concatenate(subfp_fids_chunks), np.concatenate(subfp_code_chunks))
-
+        if len(subfp_fids):
+            sidx.build(subfp_fids, subfp_codes)
         sidx_fine = SubFingerprintIndex()
-        if subfp_fine_code_chunks:
-            sidx_fine.build(np.concatenate(subfp_fine_fids_chunks), np.concatenate(subfp_fine_code_chunks))
+        if len(subfp_fine_fids):
+            sidx_fine.build(subfp_fine_fids, subfp_fine_codes)
 
-        self.domain_index = DomainIndex(
+        return DomainIndex(
             category="general",
             landmark_index=lidx,
             binary_embed=bidx,
@@ -632,6 +660,43 @@ class SONICDatabaseManager:
             subfp_index=sidx,
             subfp_fine_index=sidx_fine,
             query_max_duration_sec=QUERY_MAX_DURATION_SEC,
+        )
+
+    def _attach_archive_with_delta(self, data, faiss_path: Path, delta: List[Dict[str, Any]]) -> DomainIndex:
+        import faiss
+        file_ids = data["file_ids"].astype(np.int64)
+        n_arch = len(file_ids)
+        hashes, lids, times = [data["hashes"]], [data["lids"]], [data["times"]]
+        n_hashes = [data["n_hashes"].astype(np.int32)]
+        raw_vecs = [data["raw_vecs"]]
+        s_fids, s_codes = [data["subfp_fids"]], [data["subfp_codes"]]
+        f_fids, f_codes = [data["subfp_fine_fids"]], [data["subfp_fine_codes"]]
+        delta_ids = []
+        for i, e in enumerate(delta):
+            fid = int(e["file_id"])
+            with np.load(self.fp_dir / e["fp_file"]) as d:
+                h, t = d["hash"], d["anchor_time"]
+                hashes.append(h.astype(np.uint32))
+                lids.append(np.full(h.size, n_arch + i, dtype=np.int32))
+                times.append(t.astype(np.float32))
+                n_hashes.append(np.array([h.size], dtype=np.int32))
+                raw_vecs.append(d["raw_vec"].reshape(1, -1).astype(np.float32))
+                sc, fc = d["subfp"], d["subfp_fine"]
+                s_fids.append(np.full(sc.shape[0], fid, dtype=np.int64))
+                s_codes.append(sc.astype(np.uint8))
+                f_fids.append(np.full(fc.shape[0], fid, dtype=np.int64))
+                f_codes.append(fc.astype(np.uint8))
+            delta_ids.append(fid)
+
+        hnsw = faiss.read_index_binary(str(faiss_path))
+        if delta_ids:
+            emb = BinaryEmbedIndex()
+            hnsw.add(np.stack([emb.binarize(v[0]) for v in raw_vecs[1:]]))  # in memory only
+        return self._assemble_domain_index(
+            np.concatenate([file_ids, np.array(delta_ids, dtype=np.int64)]),
+            np.concatenate(n_hashes), np.concatenate(hashes), np.concatenate(lids), np.concatenate(times),
+            np.concatenate(raw_vecs), hnsw,
+            np.concatenate(s_fids), np.concatenate(s_codes), np.concatenate(f_fids), np.concatenate(f_codes),
         )
 
     def clear_database(self) -> None:
@@ -669,7 +734,10 @@ class SONICDatabaseManager:
         match_type = None
 
         if matched_entry:
-            is_matched, match_type = self._classify_match(str(query_audio_path), matched_entry["path"], res)
+            is_matched, match_type = self._classify_match(
+                str(query_audio_path), matched_entry["path"], res, cand_fid=res.file_id,
+                db_duration=matched_entry.get("duration_sec"),
+            )
 
         timing = getattr(res, "timing_ms", {}) or {}
         fp_ms = round(float(timing.get("load_ms", 0.0) + timing.get("primary_fingerprint_ms", 0.0) + timing.get("secondary_fingerprint_ms", 0.0)), 2)
@@ -693,16 +761,93 @@ class SONICDatabaseManager:
             "search_time_ms": srch_ms,
             "query_time_ms": round(elapsed_ms, 2),
             "timing_breakdown": timing,
+            # additive, explainability only
+            "edit_hypothesis": (self._describe_hypothesis(res, str(query_audio_path), matched_entry.get("duration_sec"),
+                                                          match_type) if is_matched else None),
+            "similarity": (round(1.0 - float(res.evidence["fine_ber"]), 4)
+                           if is_matched and res.evidence.get("fine_ber") is not None else None),
+            "verification": dict(res.evidence) if is_matched else None,
         }
 
     @classmethod
-    def _classify_match(cls, qpath: str, mpath: str, res: Any) -> tuple[bool, Optional[str]]:
+    def _describe_hypothesis(cls, res: Any, qpath: Optional[str] = None, db_duration: Optional[float] = None,
+                             match_type: Optional[str] = None) -> str:
+        """Human-readable edit hypothesis of the accepted match, e.g. 'pitch +2 st'."""
+        h = getattr(res, "hypothesis", None) or {}
+        parts = []
+        semi = float(h.get("semitones", 0.0) or 0.0)
+        tempo = float(h.get("tempo", 1.0) or 1.0)
+        if semi:
+            # hypotheses are compensating warps: -2 compensates a query pitched UP by 2 st
+            parts.append(f"pitch {-semi:+g} st")
+        if tempo != 1.0:
+            parts.append(f"tempo x{tempo:.2f}")
+        if not parts and match_type == "Edited Audio" and qpath and db_duration:
+            q_dur = cls._audio_duration(qpath)
+            if q_dur is not None and abs(q_dur - db_duration) > 0.15 + 0.005 * db_duration:
+                parts.append(f"length {q_dur:.1f} s vs {db_duration:.1f} s in DB (trim / time shift / tempo)")
+        return ", ".join(parts) if parts else "none"
+
+    @staticmethod
+    def _audio_duration(path: str) -> Optional[float]:
+        try:
+            import soundfile as sf
+            return float(sf.info(str(path)).duration)
+        except Exception:
+            try:
+                import librosa
+                return float(librosa.get_duration(path=str(path)))
+            except Exception:
+                return None
+
+    @classmethod
+    def _classify_match(cls, qpath: str, mpath: str, res: Any, cand_fid: Optional[int] = None,
+                        db_duration: Optional[float] = None) -> tuple[bool, Optional[str]]:
         """
-        Carefully classifies whether the query audio is:
+        Classifies whether the query audio is, relative to candidate `cand_fid`
+        (default: the pipeline's accepted match res.file_id):
         1. Exact Duplicate: (True, "Duplicate")
         2. Edited Audio: (True, "Edited Audio")
         3. No Match / Different Audio: (False, None)
+
+        The decision rests only on the pipeline's fingerprint evidence for that
+        candidate (aligned sub-fingerprint bit-error-rate verification, or the
+        confident primary landmark match) - never on whether the candidate's
+        original source file exists on this machine, and never on a
+        time-domain waveform correlation (which is ~0 for any pitch / speed /
+        trim / time-shift edit). Each candidate needs its OWN passing evidence,
+        so callers iterating res.ranked_ids (audit, intra-batch dedup) can't
+        flag unrelated files on the strength of the top match.
         """
+        evidence = getattr(res, "candidate_evidence", None)
+        if evidence is None:  # result object from a pipeline without verification evidence
+            return cls._classify_match_legacy(qpath, mpath, res)
+        fid = cand_fid if cand_fid is not None else getattr(res, "file_id", None)
+        if fid is None:
+            return (False, None)
+        accepted_fid = getattr(res, "file_id", None)
+        # Same-filename shortcut, kept from the previous logic but only for the accepted match.
+        if fid == accepted_fid and Path(mpath).name.lower() == Path(qpath).name.lower():
+            return (True, "Duplicate")
+        ev = evidence.get(fid)
+        if not ev or not ev.get("passes"):
+            return (False, None)
+        if fid == accepted_fid:
+            kind = getattr(res, "match_kind", None) or ev.get("kind") or "edited"
+        else:  # a non-top candidate that verified on its own (audit / batch dedup)
+            kind = ev.get("kind") or "edited"
+        if kind == "duplicate" and db_duration:
+            # Same audio content but a clearly different length (trimmed, padded,
+            # tempo-changed) is an edited copy, not a duplicate.
+            q_dur = cls._audio_duration(qpath)
+            if q_dur is not None and abs(q_dur - db_duration) > 0.15 + 0.005 * db_duration:
+                kind = "edited"
+        return (True, "Duplicate" if kind == "duplicate" else "Edited Audio")
+
+    @classmethod
+    def _classify_match_legacy(cls, qpath: str, mpath: str, res: Any) -> tuple[bool, Optional[str]]:
+        """Previous waveform-correlation classifier, only used for result objects
+        that carry no verification evidence."""
         try:
             m_path = Path(mpath)
             q_path = Path(qpath)
@@ -833,7 +978,7 @@ class SONICDatabaseManager:
                     if not other_entry or not Path(other_entry.get("path", "")).exists():
                         continue
 
-                    is_match, match_type = self._classify_match(str(fpath), other_entry["path"], res)
+                    is_match, match_type = self._classify_match(str(fpath), other_entry["path"], res, cand_fid=cand_fid)
                     if is_match and match_type in ("Duplicate", "Edited Audio"):
                         canonical = entry if entry["file_id"] < other_entry["file_id"] else other_entry
                         redundant = other_entry if entry["file_id"] < other_entry["file_id"] else entry

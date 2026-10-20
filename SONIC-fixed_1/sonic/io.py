@@ -117,20 +117,62 @@ def trim_leading_silence(y: np.ndarray, sr: int, rel_threshold: float = 0.15,
     return int(above[0]) * frame_len
 
 
+QUERY_SILENCE_REL_DB = -45.0
+QUERY_SILENCE_MIN_SKIP_SEC = 0.3
+QUERY_SILENCE_LOOKAHEAD_SEC = 30.0
+
+
+def _starts_silent(y: np.ndarray, sr: int, rel: float, frame_sec: float = 0.1) -> bool:
+    frame_len = max(1, int(frame_sec * sr))
+    if y.size < frame_len:
+        return False
+    n = y.size // frame_len
+    rms = np.sqrt(np.mean(y[: n * frame_len].reshape(n, frame_len).astype(np.float64) ** 2, axis=1))
+    peak = rms.max()
+    return bool(peak <= 1e-8 or rms[0] <= rel * peak)
+
+
+def skip_leading_silence(y: np.ndarray, sr: int = ANALYSIS_SR, target_samples: int | None = None,
+                          silence_rel_db: float = QUERY_SILENCE_REL_DB,
+                          min_skip_sec: float = QUERY_SILENCE_MIN_SKIP_SEC) -> np.ndarray:
+    """Drops a leading near-digital-silence section (frames below
+    silence_rel_db relative to the loudest 100 ms frame) and returns at most
+    target_samples samples from where content starts, re-peak-normalised.
+    The threshold is deliberately far lower than the old 0.15 (-16 dB)
+    heuristic that config.py notes hurt speech: -45 dB only catches padding /
+    true silence, not soft speech onsets. Arrays that already start with
+    content are returned unchanged (same object, then capped)."""
+    rel = 10.0 ** (silence_rel_db / 20.0)
+    out = y
+    if y.size and _starts_silent(y, sr, rel):
+        start = trim_leading_silence(y, sr, rel_threshold=rel)
+        if start >= int(min_skip_sec * sr):
+            out = y[start:]
+            peak = float(np.max(np.abs(out))) if out.size else 0.0
+            if target_samples is not None:
+                out = out[:target_samples]
+                peak = float(np.max(np.abs(out))) if out.size else 0.0
+            if peak > 1e-8:
+                out = (out / peak).astype(np.float32)
+            return out
+    return out if target_samples is None else out[:target_samples]
+
+
 def load_query_window(path: str, target_duration: float, sr: int = ANALYSIS_SR,
-                       lookahead_sec: float = 10.0) -> np.ndarray:
-    """Loads up to (target_duration + lookahead_sec) seconds from the start of
-    a file, skips a leading quiet/pause section if present, and returns a
-    window of at most target_duration seconds starting from where content
-    begins. This keeps the per-query STFT/fingerprint cost bounded at
-    target_duration while still avoiding the accuracy loss a fixed cold t=0
-    cutoff causes on recordings (e.g. spontaneous/unscripted speech) whose
-    first few seconds are a pause rather than real content - see
-    config.QUERY_MAX_DURATION_SEC_BY_DOMAIN for the measured trade-off this
-    fixes."""
-    y = load_audio(path, sr=sr, max_duration=target_duration + lookahead_sec)
+                       lookahead_sec: float = QUERY_SILENCE_LOOKAHEAD_SEC,
+                       silence_rel_db: float = QUERY_SILENCE_REL_DB,
+                       min_skip_sec: float = QUERY_SILENCE_MIN_SKIP_SEC) -> np.ndarray:
+    """Query window of at most target_duration seconds that starts where
+    content starts. Decodes only target_duration first; only when that window
+    begins with near-silence (see skip_leading_silence) is a longer span
+    (target_duration + lookahead_sec) decoded and the leading silence
+    skipped. Recordings that start with content cost exactly what
+    load_audio(max_duration=target_duration) costs and give the same array."""
+    y = load_audio(path, sr=sr, max_duration=target_duration)
     if y.size == 0:
         return y
-    start = trim_leading_silence(y, sr)
-    target_samples = int(target_duration * sr)
-    return y[start : start + target_samples]
+    rel = 10.0 ** (silence_rel_db / 20.0)
+    if not _starts_silent(y, sr, rel):
+        return y
+    y_long = load_audio(path, sr=sr, max_duration=target_duration + lookahead_sec)
+    return skip_leading_silence(y_long, sr, int(target_duration * sr), silence_rel_db, min_skip_sec)

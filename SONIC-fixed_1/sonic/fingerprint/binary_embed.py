@@ -114,6 +114,30 @@ def _build_mel_filterbank(sr: int, n_fft: int, n_mels: int, fmin: float, fmax: f
 # hundred KB total for 200 files), so this stays well inside the RAM budget.
 SUBFP_FINE_N_BANDS = 48  # -> SUBFP_N_SEG * SUBFP_FINE_N_BANDS = 192 bits/window
 
+# Exact frame geometry of the stored sub-fingerprint windows (what
+# sub_fingerprints_from_magnitude actually uses after rounding to STFT frames):
+# window i of an indexed file starts at frame i * SUBFP_HOP_FRAMES, i.e. at
+# i * SUBFP_HOP_SEC_EXACT (~0.3018 s) seconds. Used by the verification stage
+# in retrieval/pipeline.py to know where each stored window sits in time.
+SUBFP_WINDOW_FRAMES = max(2, int(round(SUBFP_WINDOW_SEC / (HOP_LENGTH / ANALYSIS_SR))))
+SUBFP_HOP_FRAMES = max(1, int(round(SUBFP_HOP_SEC / (HOP_LENGTH / ANALYSIS_SR))))
+SUBFP_HOP_SEC_EXACT = SUBFP_HOP_FRAMES * HOP_LENGTH / ANALYSIS_SR
+
+# --- Query-side tempo hypotheses -------------------------------------------
+# A tempo change by rate r (r > 1 = faster) maps a stored 1.5 s window onto
+# 1.5 / r s of the query. Computing the query's codes on windows of
+# SUBFP_WINDOW_SEC / r (segments scale with it) re-aligns the band-delta
+# segments with the stored ones, the same way the pitch hypotheses below
+# re-align frequency bands. The grid covers the required 5-20 % range in both
+# directions. 0.95 / 1.05 were added after the dev-seed calibration
+# (.agents/tasks/sonic-robustness/experiments.md, E4): with only
+# {0.8, 0.9, 1.1, 1.2} speed +5 % reached 83.8 % (dev, n=37); with the two
+# extra hypotheses 91.9 %, at ~+20 % verify cost on queries that run the full grid.
+TEMPO_HYPOTHESES = (0.8, 0.9, 0.95, 1.05, 1.1, 1.2)
+# Resample-style "varispeed" (pitch and tempo change together): only used when
+# explicitly enabled in RetrievalParams.joint_hyps.
+JOINT_VARISPEED_HYPOTHESES = tuple((-12.0 * float(np.log2(r)), r) for r in (0.8, 0.9, 1.1, 1.2))
+
 # --- Query-side pitch-hypothesis search (targeted +-1 semitone fix) ---------
 # Diagnosis (see REPORT.md Sec. 29 / retrieval/pipeline.py's escalation
 # comments): the coarse sub-fingerprint's mean self-Hamming distance under a
@@ -257,6 +281,80 @@ def sub_fingerprints_from_magnitude(mag: np.ndarray, frame_times: np.ndarray,
 def fine_sub_fingerprints_from_magnitude(mag: np.ndarray, frame_times: np.ndarray,
                                           sr: int = ANALYSIS_SR) -> list[tuple[float, np.ndarray]]:
     return sub_fingerprints_from_magnitude(mag, frame_times, sr, n_bands=SUBFP_FINE_N_BANDS)
+
+
+def log_mel_bands(mag: np.ndarray, sr: int = ANALYSIS_SR, n_bands: int = SUBFP_N_BANDS) -> np.ndarray:
+    """(n_bands+1, n_frames) log-mel energies, exactly as sub_fingerprints_from_magnitude computes them."""
+    fb = _build_mel_filterbank(sr, _N_FFT, n_bands + 1, F_MIN, min(F_MAX, sr / 2))
+    return np.log1p(fb @ (mag.astype(np.float32) ** 2))
+
+
+def windowed_codes(log_mel: np.ndarray, window_frames: int, hop_frames: int) -> tuple[np.ndarray, np.ndarray]:
+    """Vectorised band-delta codes on full windows of `window_frames` frames
+    every `hop_frames` frames. Returns (start_frames, packed uint8 codes). For
+    window_frames == SUBFP_WINDOW_FRAMES and a multiple of SUBFP_HOP_FRAMES
+    this reproduces sub_fingerprints_from_magnitude's full windows bit for bit
+    (same segment boundaries, same per-segment median). A clip shorter than
+    one window yields one whole-clip window, as at index time."""
+    n_bands1, n_frames = log_mel.shape
+    n_bands = n_bands1 - 1
+    if n_frames < 2:
+        return np.empty(0, np.int64), np.empty((0, (SUBFP_N_SEG * n_bands + 7) // 8), np.uint8)
+    window_frames = max(2, int(window_frames))
+    if n_frames < window_frames:
+        starts = np.array([0], dtype=np.int64)
+    else:
+        starts = np.arange(0, n_frames - window_frames + 1, max(1, int(hop_frames)), dtype=np.int64)
+    return starts, windowed_codes_at(log_mel, window_frames, starts)
+
+
+def windowed_codes_at(log_mel: np.ndarray, window_frames: int, starts: np.ndarray) -> np.ndarray:
+    """Packed band-delta codes of the windows starting at `starts` (frames),
+    each `window_frames` long (clipped to one whole-clip window when the clip
+    is shorter). See windowed_codes."""
+    n_bands1, n_frames = log_mel.shape
+    n_bands = n_bands1 - 1
+    starts = np.asarray(starts, dtype=np.int64)
+    window_frames = max(2, int(window_frames))
+    if n_frames < window_frames:
+        window_frames = n_frames
+    if starts.size == 0 or n_frames < 2:
+        return np.empty((0, (SUBFP_N_SEG * n_bands + 7) // 8), np.uint8)
+    rel = np.linspace(0, window_frames, SUBFP_N_SEG + 1).astype(int)
+    seg_energy = np.empty((SUBFP_N_SEG, n_bands1, starts.size), dtype=np.float32)
+    for s in range(SUBFP_N_SEG):
+        lo = rel[s]
+        length = max(rel[s + 1], lo + 1) - lo
+        view = np.lib.stride_tricks.sliding_window_view(log_mel, length, axis=1)  # (B, n-L+1, L)
+        seg_energy[s] = np.median(view[:, starts + lo, :], axis=2)
+    bits = (seg_energy[:, :-1, :] - seg_energy[:, 1:, :]) > 0          # (SEG, BANDS, n_w)
+    bits = np.transpose(bits, (2, 0, 1)).reshape(starts.size, SUBFP_N_SEG * n_bands)
+    return np.packbits(bits.astype(np.uint8), axis=1)
+
+
+def hypothesis_codes(mag: np.ndarray, sr: int = ANALYSIS_SR, semitone: float = 0.0, tempo: float = 1.0,
+                     n_bands: int = SUBFP_N_BANDS, query_hop_frames: int = 2,
+                     log_mel: np.ndarray | None = None) -> tuple[np.ndarray, np.ndarray]:
+    """Packed query codes under one edit hypothesis: frequency warp by
+    `semitone` (compensation, see warp_magnitude_freq) and windows of
+    SUBFP_WINDOW_FRAMES / tempo frames. Returns (start_frames, codes) on a
+    dense `query_hop_frames` grid so the verification stage can pick the
+    query window that best lines up with each stored window."""
+    if log_mel is None:
+        m = warp_magnitude_freq(mag, semitone) if semitone else mag
+        log_mel = log_mel_bands(m, sr, n_bands)
+    w = max(2, int(round(SUBFP_WINDOW_FRAMES / float(tempo))))
+    return windowed_codes(log_mel, w, query_hop_frames)
+
+
+def hypothesis_sub_fingerprints(mag: np.ndarray, frame_times: np.ndarray, sr: int = ANALYSIS_SR,
+                                semitone: float = 0.0, tempo: float = 1.0, n_bands: int = SUBFP_N_BANDS,
+                                query_hop_sec: float = SUBFP_HOP_SEC) -> list[tuple[float, np.ndarray]]:
+    """[(window_start_time, raw_band_delta_vector)] under one (pitch, tempo)
+    hypothesis, in the same format as sub_fingerprints_from_magnitude."""
+    m = warp_magnitude_freq(mag, semitone) if semitone else mag
+    return sub_fingerprints_from_magnitude(m, frame_times, sr, window_sec=SUBFP_WINDOW_SEC / tempo,
+                                           hop_sec=query_hop_sec / tempo, n_bands=n_bands)
 
 
 def band_energy_vector_from_magnitude(mag: np.ndarray, sr: int = ANALYSIS_SR) -> np.ndarray:
