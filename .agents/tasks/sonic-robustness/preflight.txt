@@ -1,0 +1,9 @@
+# preflight Tue Oct 20 04:15:15 IST 2026
+ M app.py
+ M sonic_db_store/manifest.json
+?? .agents/
+?? SONIC-fixed_1/scripts/20_module1_robustness_benchmark.py
+?? server.log
+?? sonic_db_store/fingerprints/fp_28408.npz
+7a3939f3c109e72da30103cd7b4f760bacfcbb7b  sonic_db_store/manifest.json
+863f2cb14a07c8776dd7a7c2268703ec74fceb10  sonic_db_store/unified_archive.npz

@@ -1,0 +1,49 @@
+# Ephemeral upload files
+uploads/*
+!uploads/.gitkeep
+
+# Dependencies
+node_modules/
+*/node_modules/
+*/*/node_modules/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ipynb_checkpoints/
+*.sqlite
+*.sqlite3
+
+# OS specific files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Explicitly ensure databases, fingerprints and ML models are tracked
+!sonic_db_store/
+!sonic_db_store/**
+!syntehetic audio detection/echoes_fingerprints.db
+!syntehetic audio detection/echoes_clean_v3.db
+!syntehetic audio detection/models/
+!syntehetic audio detection/models/**
+*backup*.pkl
+
+# Monolithic archive exceeds GitHub 100MB limit (tracked as unified_archive.part*.bin chunks)
+sonic_db_store/unified_archive.npz
+sonic_db_store/unified_index_cache.pkl
+
+# Scratch exploration scripts & intermediate DB
+scratch/
+syntehetic audio detection/scratch/
+syntehetic audio detection/echoes_clean_v2.db
+
+# Synthetic audio test dataset media (manifest and README are tracked)
+synthetic audio test dataset/real_audio/
+synthetic audio test dataset/ai_synthetic/
+# Local Python virtualenv and server logs
+.venv/
+server.log
+# Pre-fix source/store backups (same content is in git history)
+.agents/tasks/sonic-robustness/backup/
